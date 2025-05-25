@@ -27,6 +27,11 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Cake\Routing\Router;
+use Cake\Routing\RouteBuilder;
+use Psr\Http\Server\MiddlewareInterface;
+use App\Middleware\CorsMiddleware;
+
 
 /**
  * Application setup class.
@@ -38,6 +43,13 @@ use Cake\Routing\Middleware\RoutingMiddleware;
  */
 class Application extends BaseApplication
 {
+    public function routes(RouteBuilder $routes): void
+    {
+        file_put_contents(TMP . 'routes_called.log', 'routes.php loaded' . PHP_EOL, FILE_APPEND);
+
+        $routesCallback = require CONFIG . 'routes.php';
+        $routesCallback($routes);
+    }
     /**
      * Load all the application configuration and bootstrap logic.
      *
@@ -64,6 +76,15 @@ class Application extends BaseApplication
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
+        $csrf = new CsrfProtectionMiddleware([
+            'httponly' => true,
+        ]);
+
+        // APIパスは除外
+        $csrf = $csrf->skipCheckCallback(function ($request) {
+            return str_starts_with($request->getPath(), '/api/');
+        });
+        
         $middlewareQueue
             // Catch any exceptions in the lower layers,
             // and make an error page/response
@@ -84,12 +105,8 @@ class Application extends BaseApplication
             // available as array through $request->getData()
             // https://book.cakephp.org/5/en/controllers/middleware.html#body-parser-middleware
             ->add(new BodyParserMiddleware())
-
-            // Cross Site Request Forgery (CSRF) Protection Middleware
-            // https://book.cakephp.org/5/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
-            ->add(new CsrfProtectionMiddleware([
-                'httponly' => true,
-            ]));
+            ->add($csrf)
+            ->add(new CorsMiddleware());
 
         return $middlewareQueue;
     }

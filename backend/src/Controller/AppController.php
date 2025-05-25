@@ -17,6 +17,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Event\EventInterface;
+use Cake\View\JsonView;
 
 /**
  * Application Controller
@@ -48,5 +50,10 @@ class AppController extends Controller
          * see https://book.cakephp.org/5/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
+    }
+
+    public function beforeRender(EventInterface $event): void
+    {
+        parent::beforeRender($event);
     }
 }
