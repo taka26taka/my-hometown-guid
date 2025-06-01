@@ -78,8 +78,14 @@ class ShopsTable extends Table
             ->allowEmptyString('comment');
 
         $validator
-            ->scalar('map_embed_url')
-            ->allowEmptyString('map_embed_url');
+            ->decimal('lat')
+            ->requirePresence('lat', 'create')
+            ->notEmptyString('lat');
+
+        $validator
+            ->decimal('lng')
+            ->requirePresence('lng', 'create')
+            ->notEmptyString('lng');
 
         return $validator;
     }

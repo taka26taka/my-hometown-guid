@@ -30,7 +30,8 @@ class Shop extends Entity
         'description' => true,
         'area' => true,
         'comment' => true,
-        'map_embed_url' => true,
+        'lat' => true,
+        'lng' => true,
         'created' => true,
         'modified' => true,
     ];
