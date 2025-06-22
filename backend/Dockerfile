@@ -8,7 +8,8 @@ WORKDIR /var/www/html
 COPY . .
 
 RUN curl -sS https://getcomposer.org/installer | php && \
-    php composer.phar install --no-dev --optimize-autoloader
+    php composer.phar install --no-dev --optimize-autoloader && \
+    echo "listen = 127.0.0.1:9000" >> /usr/local/etc/php-fpm.d/www.conf
 
 COPY docker/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
