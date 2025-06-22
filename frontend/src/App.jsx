@@ -12,10 +12,11 @@ function App() {
   const { favorites, toggleFavorite, isFavorite } = useFavoriteShops();
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/shops.json')
-      .then(res => setShops(res.data.data ?? []))
-      .catch(err => console.error(err));
-  }, []);
+  axios
+    .get(`${import.meta.env.VITE_API_URL}/api/shops.json`)
+    .then(res => setShops(res.data.data ?? []))
+    .catch(err => console.error(err));
+}, []);
 
   const filteredShops = shops.filter(shop => shop.area === selectedArea);
 
