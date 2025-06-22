@@ -1,6 +1,0 @@
-{
-  "build": [
-    "composer install --no-dev --optimize-autoloader"
-  ],
-  "start": "php -S 0.0.0.0:3000 -t webroot"
-}
