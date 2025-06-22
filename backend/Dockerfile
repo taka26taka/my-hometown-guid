@@ -13,4 +13,4 @@ RUN curl -sS https://getcomposer.org/installer | php && \
 
 COPY docker/default.conf /etc/nginx/conf.d/default.conf
 
-CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "php-fpm -F & nginx -g 'daemon off;'"]
