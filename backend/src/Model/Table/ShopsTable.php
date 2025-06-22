@@ -24,6 +24,8 @@ use Cake\Validation\Validator;
  * @method iterable<\App\Model\Entity\Shop>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\Shop> saveManyOrFail(iterable $entities, array $options = [])
  * @method iterable<\App\Model\Entity\Shop>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\Shop>|false deleteMany(iterable $entities, array $options = [])
  * @method iterable<\App\Model\Entity\Shop>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\Shop> deleteManyOrFail(iterable $entities, array $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class ShopsTable extends Table
 {
@@ -40,6 +42,7 @@ class ShopsTable extends Table
         $this->setTable('shops');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+
         $this->addBehavior('Timestamp');
     }
 
@@ -69,6 +72,16 @@ class ShopsTable extends Table
             ->notEmptyString('description');
 
         $validator
+            ->decimal('lat')
+            ->requirePresence('lat', 'create')
+            ->notEmptyString('lat');
+
+        $validator
+            ->decimal('lng')
+            ->requirePresence('lng', 'create')
+            ->notEmptyString('lng');
+
+        $validator
             ->scalar('area')
             ->maxLength('area', 255)
             ->allowEmptyString('area');
@@ -78,14 +91,35 @@ class ShopsTable extends Table
             ->allowEmptyString('comment');
 
         $validator
-            ->decimal('lat')
-            ->requirePresence('lat', 'create')
-            ->notEmptyString('lat');
+            ->scalar('official_url')
+            ->maxLength('official_url', 512)
+            ->allowEmptyString('official_url');
 
         $validator
-            ->decimal('lng')
-            ->requirePresence('lng', 'create')
-            ->notEmptyString('lng');
+            ->scalar('genre')
+            ->maxLength('genre', 50)
+            ->allowEmptyString('genre');
+
+        $validator
+            ->scalar('price_range')
+            ->maxLength('price_range', 50)
+            ->allowEmptyString('price_range');
+
+        $validator
+            ->integer('walk_minutes_from_station')
+            ->allowEmptyString('walk_minutes_from_station');
+
+        $validator
+            ->scalar('image_url')
+            ->allowEmptyString('image_url');
+
+        $validator
+            ->scalar('chosen_by')
+            ->allowEmptyString('chosen_by');
+
+        $validator
+            ->scalar('google_map_url')
+            ->allowEmptyString('google_map_url');
 
         return $validator;
     }

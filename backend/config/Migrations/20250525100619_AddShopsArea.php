@@ -25,8 +25,9 @@ class AddShopsArea extends BaseMigration
                 'default' => null,
                 'null' => true,
             ])
-            ->addColumn('map_embed_url', 'text', [
+            ->addColumn('official_url', 'string', [
                 'default' => null,
+                'limit' => 512,
                 'null' => true,
             ])
             ->update();
