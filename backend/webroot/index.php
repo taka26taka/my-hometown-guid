@@ -1,4 +1,6 @@
 <?php
+error_log(date('Y-m-d H:i:s') . " PING\n");
+
 /**
  * The Front Controller for handling every request
  *
