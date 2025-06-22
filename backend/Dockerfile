@@ -8,4 +8,4 @@ WORKDIR /var/www/html
 
 COPY . .
 
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "webroot", "webroot/index.php"]
+CMD sh -c 'php -S 0.0.0.0:$PORT -t webroot webroot/index.php'
