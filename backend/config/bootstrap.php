@@ -64,7 +64,7 @@ require CAKE . 'functions.php';
  * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
  * for more information for recommended practices.
 */
-if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
+if (file_exists(CONFIG . '.env')) {
     $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
     $dotenv->parse()
         ->putenv()
@@ -72,8 +72,7 @@ if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
         ->toServer();
 }
 
-// DEPLOY_ENV をここで読み取っておく
-$env = env('DEPLOY_ENV', 'local');
+$env = env('DEPLOY_ENV') ?: 'local';
 
 try {
     // 基本設定読み込み
