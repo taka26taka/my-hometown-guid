@@ -279,6 +279,10 @@ return [
          * in app_local.php depending on the application's needs.
          */
         'default' => [
+            'database' => env('DATABASE_NAME', 'default_db'),
+            'username' => env('DATABASE_USER', 'root'),
+            'password' => env('DATABASE_PASSWORD', ''),
+            'host'     => env('DATABASE_HOST', 'localhost'),
             'className' => Connection::class,
             'driver' => Mysql::class,
             'persistent' => false,
