@@ -201,6 +201,8 @@ ServerRequest::addDetector('tablet', function ($request) {
 
     return $detector->isTablet();
 });
+$env = env('DEPLOY_ENV', 'local');
+Configure::load("app_{$env}", 'default', true);
 
 /*
  * You can enable default locale format parsing by adding calls
