@@ -72,31 +72,28 @@ if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
         ->toServer();
 }
 
-/*
- * Initializes default Config store and loads the main configuration file (app.php)
- *
- * CakePHP contains 2 configuration files after project creation:
- * - `config/app.php` for the default application configuration.
- * - `config/app_local.php` for environment specific configuration.
- */
+// DEPLOY_ENV をここで読み取っておく
+$env = env('DEPLOY_ENV', 'local');
+
 try {
+    // 基本設定読み込み
     Configure::config('default', new PhpConfig());
     Configure::load('app', 'default', false);
+
+    // 環境別設定（例：config/app_prod.php）を読み込み
+    if (file_exists(CONFIG . "app_{$env}.php")) {
+        Configure::load("app_{$env}", 'default', true);
+    }
+
+    // 開発者用ローカル上書き設定
+    if (file_exists(CONFIG . 'app_local.php')) {
+        Configure::load('app_local', 'default');
+    }
 } catch (\Exception $e) {
     exit($e->getMessage() . "\n");
 }
 
-/*
- * Load an environment local configuration file to provide overrides to your configuration.
- * Notice: For security reasons app_local.php **should not** be included in your git repo.
- */
-if (file_exists(CONFIG . 'app_local.php')) {
-    Configure::load('app_local', 'default');
-}
-
-/*
- * When debug = true the metadata cache should only last for a short time.
- */
+// debugモード時のキャッシュ短縮
 if (Configure::read('debug')) {
     Configure::write('Cache._cake_model_.duration', '+2 minutes');
     Configure::write('Cache._cake_translations_.duration', '+2 minutes');
