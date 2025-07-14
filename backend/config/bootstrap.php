@@ -64,39 +64,35 @@ require CAKE . 'functions.php';
  * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
  * for more information for recommended practices.
 */
-// if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
-//     $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
-//     $dotenv->parse()
-//         ->putenv()
-//         ->toEnv()
-//         ->toServer();
-// }
+if (file_exists(CONFIG . '.env')) {
+    $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
+    $dotenv->parse()
+        ->putenv()
+        ->toEnv()
+        ->toServer();
+}
 
-/*
- * Initializes default Config store and loads the main configuration file (app.php)
- *
- * CakePHP contains 2 configuration files after project creation:
- * - `config/app.php` for the default application configuration.
- * - `config/app_local.php` for environment specific configuration.
- */
+$env = env('DEPLOY_ENV') ?: 'local';
+
 try {
+    // 基本設定読み込み
     Configure::config('default', new PhpConfig());
     Configure::load('app', 'default', false);
+
+    // 環境別設定（例：config/app_prod.php）を読み込み
+    if (file_exists(CONFIG . "app_{$env}.php")) {
+        Configure::load("app_{$env}", 'default', true);
+    }
+
+    // 開発者用ローカル上書き設定
+    if (file_exists(CONFIG . 'app_local.php')) {
+        Configure::load('app_local', 'default');
+    }
 } catch (\Exception $e) {
     exit($e->getMessage() . "\n");
 }
 
-/*
- * Load an environment local configuration file to provide overrides to your configuration.
- * Notice: For security reasons app_local.php **should not** be included in your git repo.
- */
-if (file_exists(CONFIG . 'app_local.php')) {
-    Configure::load('app_local', 'default');
-}
-
-/*
- * When debug = true the metadata cache should only last for a short time.
- */
+// debugモード時のキャッシュ短縮
 if (Configure::read('debug')) {
     Configure::write('Cache._cake_model_.duration', '+2 minutes');
     Configure::write('Cache._cake_translations_.duration', '+2 minutes');
@@ -201,6 +197,8 @@ ServerRequest::addDetector('tablet', function ($request) {
 
     return $detector->isTablet();
 });
+$env = env('DEPLOY_ENV', 'local');
+Configure::load("app_{$env}", 'default', true);
 
 /*
  * You can enable default locale format parsing by adding calls

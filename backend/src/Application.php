@@ -66,6 +66,9 @@ class Application extends BaseApplication
                 (new TableLocator())->allowFallbackClass(false)
             );
         }
+        if (env('APP_DEBUG', false)) {
+            $this->addPlugin('DebugKit');
+        }
     }
 
     /**
