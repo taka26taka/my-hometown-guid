@@ -22,19 +22,19 @@ function App() {
 
   return (
     <div className="bg-rose-50 min-h-screen py-8 px-4 font-serif">
-      <h1 className="text-4xl font-bold text-center text-pink-600 mb-4 tracking-wide handwriting">
+      <h1 className="text-3xl sm:text-4xl font-bold text-center text-pink-600 mb-4 tracking-wide handwriting">
         盛岡・北上・花巻 おすすめマップ
       </h1>
 
       {/* ウェルカムメッセージ */}
-      <p className="text-center text-gray-700 mb-10 max-w-2xl mx-auto leading-relaxed">
+      <p className="text-sm sm:text-base text-center text-gray-700 mb-10 max-w-2xl mx-auto leading-relaxed">
         本日は私たちの結婚式にご参列いただき、誠にありがとうございます。<br />
         盛岡・北上・花巻には、私たちの思い出の場所や大好きなお店がたくさんあります。<br />
         結婚式の前後に、ぜひ立ち寄ってみてください。
       </p>
 
       {/* 地域選択 */}
-      <div className="flex justify-center mb-10">
+      <div className="flex justify-center mb-6 sm:mb-10">
         <select
           value={selectedArea}
           onChange={e => setSelectedArea(e.target.value)}
@@ -47,7 +47,7 @@ function App() {
       </div>
 
       {/* 地図 */}
-      <div className="mb-12 border-2 border-dashed border-pink-200 rounded-xl overflow-hidden shadow-md">
+      <div className="mb-8 sm:mb-12 border-2 border-dashed border-pink-200 rounded-xl overflow-hidden shadow-md">
         <MapView
           shops={filteredShops}
           selectedShop={selectedShop}
@@ -56,7 +56,7 @@ function App() {
       </div>
 
       {/* 店舗カード */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {filteredShops.map((shop) => (
           <div
             key={shop.id}
@@ -78,8 +78,8 @@ function App() {
             <span className="inline-block bg-pink-100 text-pink-700 text-xs px-3 py-1 rounded-full mb-2">
               #ふたりの思い出の場所
             </span>
-            <h2 className="text-2xl font-semibold text-pink-700 mb-2 handwriting">{shop.name}</h2>
-            <p className="text-gray-700 mb-2 leading-relaxed">{shop.description}</p>
+            <h2 className="text-xl sm:text-2xl font-semibold text-pink-700 mb-2 handwriting">{shop.name}</h2>
+            <p className="text-sm sm:text-base text-gray-700 mb-2 leading-relaxed">{shop.description}</p>
             <p className="text-sm text-gray-500">{shop.address}</p>
             {shop.walk_minutes_from_station && (
               <p className="text-xs text-gray-400 mt-1">{shop.walk_minutes_from_station}分（駅から）</p>

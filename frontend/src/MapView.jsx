@@ -67,8 +67,14 @@ const MapView = ({ shops, selectedShop, selectedArea }) => {
       if (marker) marker.openPopup();
     }
   }, [selectedShop]);
+  return (
+    <div
+      ref={mapContainerRef}
+      id="map"
+      className="h-[50vh] sm:h-[500px]"
+    />
+  );
 
-  return <div ref={mapContainerRef} id="map" style={{ height: '500px' }} />;
 };
 
 export default MapView;
