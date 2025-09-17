@@ -60,6 +60,7 @@ function App() {
         {filteredShops.map((shop) => (
           <div
             key={shop.id}
+            id={`shop-card-${shop.id}`} 
             onClick={() => setSelectedShop(shop)}
             className="relative bg-white rounded-2xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-shadow border border-pink-100"
           >

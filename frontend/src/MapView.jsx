@@ -13,7 +13,7 @@ const MapView = ({ shops, selectedShop, selectedArea }) => {
   const mapRef = useRef(null);
   const mapContainerRef = useRef(null);
   const markersRef = useRef({});
-  
+
   const areaCenters = {
     morioka: [39.7036, 141.1527],
     kitakami: [39.2836, 141.1137],
@@ -49,9 +49,35 @@ const MapView = ({ shops, selectedShop, selectedArea }) => {
 
     shops.forEach(shop => {
       if (shop.lat && shop.lng) {
-        const marker = L.marker([shop.lat, shop.lng])
-          .addTo(mapRef.current)
-          .bindPopup(`<strong>${shop.name}</strong><br>${shop.comment || ''}`);
+        const marker = L.marker([shop.lat, shop.lng]).addTo(mapRef.current);
+
+        // 安全にカスタム要素を生成
+        const popupDiv = L.DomUtil.create('div');
+        popupDiv.innerHTML = `<strong>${shop.name}</strong><br>${shop.comment || ''}`;
+
+        const btn = L.DomUtil.create('button', 'popup-btn', popupDiv);
+        btn.innerText = '↓ 詳細を見る';
+        btn.style.marginTop = '8px';
+        btn.style.padding = '4px 8px';
+        btn.style.background = '#ec4899'; // pink-500
+        btn.style.color = 'white';
+        btn.style.border = 'none';
+        btn.style.borderRadius = '4px';
+        btn.style.cursor = 'pointer';
+        btn.style.fontSize = '12px';
+
+        btn.onclick = () => {
+          const target = document.getElementById(`shop-card-${shop.id}`);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            target.classList.add('ring', 'ring-pink-300', 'ring-offset-2');
+            setTimeout(() => {
+              target.classList.remove('ring', 'ring-pink-300', 'ring-offset-2');
+            }, 2000);
+          }
+        };
+
+        marker.bindPopup(popupDiv);
         markersRef.current[shop.id] = marker;
       }
     });
