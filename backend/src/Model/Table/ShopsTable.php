@@ -121,6 +121,14 @@ class ShopsTable extends Table
             ->scalar('google_map_url')
             ->allowEmptyString('google_map_url');
 
+        $validator
+            ->scalar('open_time')
+            ->allowEmptyString('open_time');
+
+        $validator
+            ->scalar('end_time')
+            ->allowEmptyString('end_time');
+
         return $validator;
     }
 }

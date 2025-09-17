@@ -28,7 +28,7 @@ function App() {
 
       {/* ウェルカムメッセージ */}
       <p className="text-sm sm:text-base text-center text-gray-700 mb-10 max-w-2xl mx-auto leading-relaxed">
-        本日は私たちの結婚式にご参列いただき、誠にありがとうございます。<br />
+        本日は私たちの結婚式にご参加いただき、誠にありがとうございます。<br />
         盛岡・北上・花巻には、私たちの思い出の場所や大好きなお店がたくさんあります。<br />
         結婚式の前後に、ぜひ立ち寄ってみてください。
       </p>

@@ -25,6 +25,8 @@ use Cake\ORM\Entity;
  * @property string|null $image_url
  * @property string|null $chosen_by
  * @property string|null $google_map_url
+ * @property string|null $open_time
+ * @property string|null $end_time
  */
 class Shop extends Entity
 {
@@ -54,5 +56,7 @@ class Shop extends Entity
         'image_url' => true,
         'chosen_by' => true,
         'google_map_url' => true,
+        'open_time' => true,
+        'end_time' => true,
     ];
 }
