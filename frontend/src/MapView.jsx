@@ -1,17 +1,12 @@
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
-import markerIcon2x from './assets/marker-icon-2x.png';
-import markerIcon from './assets/marker-icon.png';
-import markerShadow from './assets/marker-shadow.png';
-
 import 'leaflet/dist/leaflet.css';
 
 delete L.Icon.Default.prototype._getIconUrl;
-
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerIcon2x,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
+  iconRetinaUrl: '/my-hometown-guid/marker-icon-2x.png',
+  iconUrl: '/my-hometown-guid/marker-icon.png',
+  shadowUrl: '/my-hometown-guid/marker-shadow.png',
 });
 
 const MapView = ({ shops, selectedShop, selectedArea }) => {
