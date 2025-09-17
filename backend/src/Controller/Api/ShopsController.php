@@ -17,7 +17,7 @@ class ShopsController extends AppController
 
     public function index()
     {
-        $shops = $this->paginate($this->Shops->find()); // ← 追加
+        $shops = $this->Shops->find()->all(); // ← 追加
 
         $this->response = $this->response
             ->withType('application/json')
