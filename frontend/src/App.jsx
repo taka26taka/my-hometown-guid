@@ -11,7 +11,7 @@ function App() {
   const [selectedGenre, setSelectedGenre] = useState('all');
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
 
-  const { favorites, toggleFavorite, isFavorite } = useFavoriteShops();
+  const { toggleFavorite, isFavorite } = useFavoriteShops();
 
   useEffect(() => {
     axios

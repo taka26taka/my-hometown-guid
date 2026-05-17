@@ -1,53 +1,85 @@
-# CakePHP Application Skeleton
+# Backend
 
-![Build Status](https://github.com/cakephp/app/actions/workflows/ci.yml/badge.svg?branch=5.x)
-[![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
-[![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat-square)](https://github.com/phpstan/phpstan)
+CakePHP 5 製の My Hometown Guide API です。MySQL の `shops` テーブルから店舗情報を取得し、フロントエンド向けに JSON を返します。
 
-A skeleton for creating applications with [CakePHP](https://cakephp.org) 5.x.
+## Stack
 
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
+- PHP 8.1+
+- CakePHP 5.2
+- cakephp/migrations 4
+- MySQL 8.0
+- PHPUnit / PHPCS / PHPStan
 
-## Installation
-
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
-
-If Composer is installed globally, run
+## Setup
 
 ```bash
-composer create-project --prefer-dist cakephp/app
+composer install
+cp config/app_local.example.php config/app_local.php
 ```
 
-In case you want to use a custom app dir name (e.g. `/myapp/`):
+Docker Compose の DB を使う場合は `config/app_local.php` の datasource を次に合わせます。
+
+```php
+'host' => 'db',
+'username' => 'user',
+'password' => 'password',
+'database' => 'my_hometown',
+```
+
+マイグレーションを実行します。
 
 ```bash
-composer create-project --prefer-dist cakephp/app myapp
+bin/cake migrations migrate
 ```
 
-You can now either use your machine's webserver to view the default home page, or start
-up the built-in webserver with:
+## Commands
 
 ```bash
-bin/cake server -p 8765
+composer test      # PHPUnit
+composer cs-check  # CakePHP coding standard
+composer cs-fix    # 自動整形
+composer stan      # PHPStan
 ```
 
-Then visit `http://localhost:8765` to see the welcome page.
+## API
 
-## Update
+### `GET /api/shops.json`
 
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
+`src/Controller/Api/ShopsController.php` の `index()` が次の JSON を返します。
 
-## Configuration
+```json
+{
+  "success": true,
+  "data": []
+}
+```
 
-Read and edit the environment specific `config/app_local.php` and set up the
-`'Datasources'` and any other configuration relevant for your application.
-Other environment agnostic settings can be changed in `config/app.php`.
+`data` には `Shop` entity の一覧が入ります。フロントエンドとの互換性を保つため、レスポンスのトップレベルキーを変更するときは `frontend/src/App.jsx` も更新してください。
 
-## Layout
+## Main files
 
-The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS
-framework by default. You can, however, replace it with any other library or
-custom styles.
+| File | Role |
+| --- | --- |
+| `src/Controller/Api/ShopsController.php` | 店舗一覧 JSON API。 |
+| `src/Model/Table/ShopsTable.php` | `shops` validation と Timestamp behavior。 |
+| `src/Model/Entity/Shop.php` | shop fields と mass assignment 設定。 |
+| `src/Middleware/CorsMiddleware.php` | API 用 CORS headers。 |
+| `config/routes.php` | `/api` prefix と `.json` extension routing。 |
+| `config/Migrations/` | `shops` table の schema history。 |
+| `tests/Fixture/ShopsFixture.php` | shops テストデータ。 |
+
+## Change checklist
+
+店舗フィールドを変更するときは、以下を同じ変更セットで確認してください。
+
+1. migration
+2. `Shop` entity PHPDoc / `$_accessible`
+3. `ShopsTable` validation
+4. fixture / tests
+5. frontend display/filter logic
+6. `README.md` / `docs/architecture.md` / `.codex/skills` の必要箇所
+
+## Security notes
+
+- `/api/` は CSRF check を skip しています。write API を追加するときは認証・CSRF・CORS の方針を明示してください。
+- CORS は現状 `*` です。公開環境では許可 origin の限定を検討してください。
